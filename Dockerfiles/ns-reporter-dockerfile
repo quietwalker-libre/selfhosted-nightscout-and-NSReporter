@@ -1,0 +1,6 @@
+FROM php:7.2-apache
+MAINTAINER Emanuel M. Di Vita 
+
+COPY build/ /var/www/html/
+
+ENTRYPOINT sed -i "s/nightscout-reporter.reptilefarm.ddns.net/$NODEIP/g" /var/www/html/settings.json

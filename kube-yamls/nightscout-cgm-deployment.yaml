@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nightscout-cgm
+  labels:
+    app: nightscout-cgm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nightscout-cgm
+  template:
+    metadata:
+      labels:
+        app: nightscout-cgm
+    spec:
+      containers:
+      - name: ns-cgm-webapp
+        image: ns-cgm-webapp:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: INSECURE_USE_HTTP
+          value: "true"
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongodbURI
+              key: mongodburi
+        - name: API_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: nightscout-apisecret
+              key: apisecret
+        - name: MONGODB_COLLECTION
+          value: "entries"
+        - name: DISPLAY_UNITS
+          value: "mg/dl"
+        - name: ENABLE 
+          value: "delta direction upbat timeago profile simplealarms iob cob sage basal openaps cors" 
+        - name: MONGO_TREATMENTS_COLLECTION
+          value: treatments
+        - name: PORT
+          value: "1337"

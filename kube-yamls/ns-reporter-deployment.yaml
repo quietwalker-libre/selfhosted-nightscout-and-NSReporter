@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nightscout-reporter
+  name: nightscout-reporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nightscout-reporter
+  template:
+    metadata:
+      labels:
+        app: nightscout-reporter
+    spec:
+      containers:
+      - name: ns-reporter-webapp
+        image: ns-reporter-webapp:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: HOSTIP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
